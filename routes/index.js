@@ -32,7 +32,7 @@ cons()
 router.route("/login").post(async (req, res) => {
     let { email, password } = req.body;
     try {
-        
+
         let result = await pool.request()
             .input('email', mssql.VarChar, email)
             .input('password', mssql.VarChar, password)
@@ -42,6 +42,22 @@ router.route("/login").post(async (req, res) => {
         res.status(500).json({
             msg: "Login Error Check Credentials"
         });
+    }
+});
+
+// Register
+router.route("/register").post(async (req, res) => {
+    let { email, password } = req.body
+    try {
+        let request = new mssql.Request()
+        request.input('email', mssql.VarChar, email)
+               .input('password', mssql.VarChar, password)
+               .query('insert into Users (email,password)values(@email,@password)');
+        res.status(201).json({
+            msg: 'User registered successfully'
+        });
+    } catch (err) {
+        res.status(500).json({ msg: err })
     }
 });
 
