@@ -53,7 +53,7 @@ router.post("/register", async (req, res) => {
             .input('email', mssql.VarChar, email)
             .input('password', mssql.VarChar, password)
             .query('INSERT INTO logintable (email, password) VALUES (@email,@password)');
-        res.status(201).json({ msg: 'User registered successfully' });
+        res.status(200).json({ msg: 'User registered successfully' });
     } catch (err) {
         console.error("Registration Error:", err);
         res.status(500).json({ msg: "Registration Error" });
