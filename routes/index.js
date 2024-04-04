@@ -60,4 +60,24 @@ router.post("/register", async (req, res) => {
     }
 });
 
+// Login
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const request = pool.request();
+        const result = await request
+            .input('email', mssql.VarChar, email)
+            .input('password', mssql.VarChar, password)
+            .query('SELECT * FROM logintable WHERE email = @email AND password = @password');
+        if (result.recordset.length > 0) {
+            res.status(200).json({ msg: "Login successful" });
+        } else {
+            res.status(401).json({ msg: "Invalid email or password" });
+        }
+    } catch (err) {
+        console.error("Login Error:", err);
+        res.status(500).json({ msg: "Login Error Check Credentials" });
+    }
+});
+
 module.exports = router;
